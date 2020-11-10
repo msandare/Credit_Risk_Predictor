@@ -1,0 +1,55 @@
+Credit Risk Indicator
+
+Goal: Binary classification, default or not
+[Note: Default == failure to repay a loan according to terms of agreement in promissory note]
+
+
+- Over Leverage: debt to assets ratio (if debt is bigger than assets you fucked)
+-- can estimate assets (based on data that I have)
+- Low Personal EBITDA: Income - Cost_of_Living_for_Area
+- Interest Coverage Ratio: interest payments / net income
+- How much of a persons income is going towards paying debt
+- Annuity: play around with length to change the payments without changing interest rate (look @ monthly income & expenses to determine max monthly payment without defaulting)
+-- Max monthly payment is required info in loan application (income & current debt payments)
+-- can estimate cost of living based on where they live and income level
+- Context leverage (in financial markets): using debt to increase risk. i.e. borrow money and put it into a stock, if it goes down need to pay lender and have loss on stock.
+
+- Best indicator of credit default risk is consumer credit history 
+- income is variable depending on age (too young == no income, too old == retirement_
+- Revolving Credit (i.e. credit card, line of credit, etc.) is riskier
+- Installment Credit (i.e loan of fixed amount: repayment scheduled over clearly defined payment schedule [borrow amount will not change over time]) - is less risky
+
+-portion of payments that goes towards interest vs. principal loan
+-- paying off only interest can make loan cost more 
+- ratio at enddate of principal:interest
+-- what the ratio of principal:interest_debt is at the end of loan
+-- how long it took to pay down the loan
+- cost_goods by lifetime_servicing
+-- downpayment (credit - price_of_goods)
+- how loans have been paid back 
+-- how much of loans have been paid back, not how many have been taken
+-- how many loans have been received, and how many have been paid back
+
+- which metrics do people use thta shouldn't be in there
+
+Dataset Notes:
+App Test/ Train:
+- cars depreciate by 14%/year on average [form: 
+- 28/36 rule: https://www.iwillteachyoutoberich.com/blog/how-much-house-can-i-afford/
+-- calculate cost of living using 28% of household expenses, with a percentage modifier for city rating, plus credit card data (better to be too high than too low)
+- could calculate cost of living as 28% of household income + (1 to 3% region rating modifier)
+- region rating is higher when population is higher too
+
+
+Previous app risk factor:
+- AMT_credit is amount recieved in prev_app (debt)
+- FLAG_LAST_APPL_PER_CONTRACT flag if last application for prev. contract, take out non-flags to ensure there was only one
+
+Installment payment risk factor:
+- difference b/w day-to-pay and day-paid: (dtp - dp)
+- difference b/w amount-owed and amount-paid: (ao - ap)
+
+
+DataSet Info:
+SK_ID_CURR == ID of loan in sample (note: in bureau, one person can have multiple bureau_ids)
+TARGET == Target Variable (1 - client w/ payment difficultes they had late payment more than X days on at least one of the first Y installments of loan in our smaple; 0 - all other cases)
