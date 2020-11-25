@@ -131,7 +131,25 @@ def one_hot_encoder(df):
     
     return df
 
-    
+
+#############################
+# Aligning Training and Testing Datasets
+def dataframe_alignment(train_df, test_df, train_label):
+    #ensure train label is a string
+    train_label = str(train_label)
+
+    training_target_labels = train_df[train_label]
+
+    #aligning the training and testing df's, keep only cols in both dfs
+    train_df, test_df = train_df.align(test_df, join = 'inner', axis = 1)
+
+    train_df[train_label] = training_target_labels
+
+    print('Training Features Shape: ', train_df.shape)
+    print('Testing Features Shape: ', test_df.shape)
+
+    return train_df, test_df
+
 ###########################
 #Aggregates the numeric values in a dataframe. This can be used to create features for each instance of the grouping variable.
 '''
