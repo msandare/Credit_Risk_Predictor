@@ -229,4 +229,43 @@ def count_categorical(df, group_var, df_name):
 
     categorical.columns = columns_names
 
-    return categorical
+    return 
+    
+
+##############################################
+#calculating the depreciation of a toyota corolla in Kazakhstan
+'''assumptions are:
+1) A new Toyota Corolla in Almaty costs 8118662
+2) 20% depreciation after first year of ownership
+3) 10% depreciation every year after first
+'''
+def car_depreciation(df):
+    car_values = []
+
+    count = 0
+    for row in df['FLAG_OWN_CAR']:
+        if row == 0:
+            car_values.append(0)
+        elif row == 1:
+            age = df.iloc[count]['OWN_CAR_AGE']
+            age.astype(np.int64)
+            
+            if np.isnan(age):
+                age = 0
+           
+           #cost of new toyota corolla in KZT
+            new_toyota_corolla_cost_KZT = 8118662
+            car = new_toyota_corolla_cost_KZT
+
+            for yr in range(int(age)):
+                if yr == 0:
+                    car = car - (car*0.2)
+                else:
+                    car = car - (car * 0.1)
+            car_values.append(car)
+        count += 1
+
+    return car_values
+
+
+
