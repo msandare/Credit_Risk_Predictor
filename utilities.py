@@ -78,8 +78,8 @@ def kde_target(var_name, df):
 
 
 #########################
-#Function to calculate correlations with the target for a dataframe
-def target_corrs(df):
+#Function to calculate correlations with the a target col for a dataframe
+def target_corrs(target_var_name, df):
     #list of correlations
     corrs = []
 
@@ -87,9 +87,9 @@ def target_corrs(df):
     for col in df.columns: 
         print(col)
         #skip the target column
-        if col != 'TARGET':
+        if col != target_var_name:
             #calculare correlation with the target
-            corr = df['TARGET'].corr(df[col])
+            corr = df[target_var_name].corr(df[col])
 
             #append the list as a tuple
             corrs.append((col, corr))
@@ -239,33 +239,33 @@ def count_categorical(df, group_var, df_name):
 2) 20% depreciation after first year of ownership
 3) 10% depreciation every year after first
 '''
-def car_depreciation(df):
-    car_values = []
+def general_car_depreciation(df, new_car_value):
+    car_values_list = []
 
     count = 0
     for row in df['FLAG_OWN_CAR']:
         if row == 0:
-            car_values.append(0)
+            car_values_list.append(0)
         elif row == 1:
             age = df.iloc[count]['OWN_CAR_AGE']
             age.astype(np.int64)
-            
+
             if np.isnan(age):
                 age = 0
-           
-           #cost of new toyota corolla in KZT
-            new_toyota_corolla_cost_KZT = 8118662
-            car = new_toyota_corolla_cost_KZT
 
+            car = new_car_value
             for yr in range(int(age)):
-                if yr == 0:
-                    car = car - (car*0.2)
-                else:
-                    car = car - (car * 0.1)
-            car_values.append(car)
+                if yr in range(int(age)):
+                    if yr == 0:
+                        #assumption car will depreciate 20% in first year
+                        car = car - (car * 0.2)
+                    else:
+                        #assumption car will depreciate 10% every year after first
+                        car = car - (car * 0.1)
+            car_values_list.append(car)
         count += 1
 
-    return car_values
+    return car_values_list
 
 
 
