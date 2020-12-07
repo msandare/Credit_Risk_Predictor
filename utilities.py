@@ -229,7 +229,7 @@ def count_categorical(df, group_var, df_name):
 
     categorical.columns = columns_names
 
-    return 
+    return categorical
     
 
 ##############################################
