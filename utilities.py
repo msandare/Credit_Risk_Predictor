@@ -78,8 +78,8 @@ def kde_target(var_name, df):
 
 
 #########################
-#Function to calculate correlations with the target for a dataframe
-def target_corrs(df):
+#Function to calculate correlations with the a target col for a dataframe
+def target_corrs(target_var_name, df):
     #list of correlations
     corrs = []
 
@@ -87,9 +87,9 @@ def target_corrs(df):
     for col in df.columns: 
         print(col)
         #skip the target column
-        if col != 'TARGET':
+        if col != target_var_name:
             #calculare correlation with the target
-            corr = df['TARGET'].corr(df[col])
+            corr = df[target_var_name].corr(df[col])
 
             #append the list as a tuple
             corrs.append((col, corr))
@@ -131,7 +131,25 @@ def one_hot_encoder(df):
     
     return df
 
-    
+
+#############################
+# Aligning Training and Testing Datasets
+def dataframe_alignment(train_df, test_df, train_label):
+    #ensure train label is a string
+    train_label = str(train_label)
+
+    training_target_labels = train_df[train_label]
+
+    #aligning the training and testing df's, keep only cols in both dfs
+    train_df, test_df = train_df.align(test_df, join = 'inner', axis = 1)
+
+    train_df[train_label] = training_target_labels
+
+    print('Training Features Shape: ', train_df.shape)
+    print('Testing Features Shape: ', test_df.shape)
+
+    return train_df, test_df
+
 ###########################
 #Aggregates the numeric values in a dataframe. This can be used to create features for each instance of the grouping variable.
 '''
@@ -212,3 +230,42 @@ def count_categorical(df, group_var, df_name):
     categorical.columns = columns_names
 
     return categorical
+    
+
+##############################################
+#calculating the depreciation of a toyota corolla in Kazakhstan
+'''assumptions are:
+1) A new Toyota Corolla in Almaty costs 8118662
+2) 20% depreciation after first year of ownership
+3) 10% depreciation every year after first
+'''
+def general_car_depreciation(df, new_car_value):
+    car_values_list = []
+
+    count = 0
+    for row in df['FLAG_OWN_CAR']:
+        if row == 0:
+            car_values_list.append(0)
+        elif row == 1:
+            age = df.iloc[count]['OWN_CAR_AGE']
+            age.astype(np.int64)
+
+            if np.isnan(age):
+                age = 0
+
+            car = new_car_value
+            for yr in range(int(age)):
+                if yr in range(int(age)):
+                    if yr == 0:
+                        #assumption car will depreciate 20% in first year
+                        car = car - (car * 0.2)
+                    else:
+                        #assumption car will depreciate 10% every year after first
+                        car = car - (car * 0.1)
+            car_values_list.append(car)
+        count += 1
+
+    return car_values_list
+
+
+
